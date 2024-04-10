@@ -1,101 +1,89 @@
-"""Rock, paper, scissors!
-
-
-Rock, paper, scissors made on Python.
-"""
-
 import random
 
+def choose_options():
+  options = ('piedra', 'papel', 'tijera')
+  user_option = input('👊 piedra, 🖐 papel o ✌ tijera => ')
+  user_option = user_option.lower()  
+  
+  if not user_option in options:
+    print('Esa opción no es válida')
+    #continue 
+    #exit() #buen tip de los comentarios
+    return None, None
+  
+  computer_option = random.choice(options) #tambien podemos usar una lista en lugar de una tupla
+  return user_option, computer_option
+  
+  print('    User option =>', user_option)
+  print('Computer option =>', computer_option)
 
-def computer_choice():
-    """Gets a random option for the computer to use."""
-
-    computer= random.choice(options)
-    return computer
-
-
-def user_choice():
-    """Gets the option the player will use."""
-
-    user= str(input("Select what you want to play this round: Rock, paper, scissors.\n"))
-    user= user.lower()
-    if user in options:
-        return user
+def check_rules(user_option, computer_option, user_wins, computers_wins):
+  if user_option == computer_option:
+    print('*' * 16)
+    print('*   EMPATE   *')
+    print('*' * 16)
+  elif user_option == 'piedra':
+    if computer_option == 'tijera':
+      print('piedra gana a tijera')
+      print('*' * 16)
+      print('* USUARIO GANO *')
+      print('*' * 16)
+      user_wins += 1
     else:
-        raise Exception("Your choice is not valid. Check for typos and try again.")
-
+      print('papel le gana a piedra')
+      print('*' * 19)
+      print('* COMPUTADORA GANO *')
+      print('*' * 19)
+      computers_wins += 1
+  elif user_option == 'papel':
+    if computer_option == 'piedra':
+      print('papel le gana a piedra')
+      print('*' * 16)
+      print('* USUARIO GANO *')
+      print('*' * 16)
+      user_wins += 1
+    else:
+      print('tijera gana a papel')
+      print('*' * 19)
+      print('* COMPUTADORA GANO *')
+      print('*' * 19)
+      computers_wins += 1
+  elif user_option == 'tijera':
+    if computer_option == 'papel':
+      print('tijera gana a papel')
+      print('*' * 16)
+      print('* USUARIO GANO *')
+      print('*' * 16)
+      user_wins += 1
+    else:
+      print('piedra gana a tijera')
+      print('*' * 19)
+      print('* COMPUTADORA GANO *')
+      print('*' * 19)
+      computers_wins += 1
+  return user_wins, computers_wins
 
 def run_game():
-    """Starts and handles the game from start to finish."""
-
-    rounds= 3
-    user_win= 0
-    computer_win= 0
-
-    print("*" * 15)
-    print("The game will start now.")
-    print("*" * 15)
+  computers_wins = 0
+  user_wins = 0
+  rounds = 1
+  while True:  
+    #print('*' * 10)
+    print('ROUND =>', rounds)
+    #print('*' * 10)
+  
+    print('COMPUTADORA: ', computers_wins)
+    print('    USUARIO: ', user_wins)
+    rounds += 1
+  
+    user_option, computer_option = choose_options()
+    user_wins, computers_wins = check_rules(user_option, computer_option, user_wins, computers_wins)  
     
-    while True:
+    if computers_wins == 2:
+      print('------------LA COMPUTADORA GANO--------------')
+      break
+    if user_wins == 2:
+      print('-----------------TU GANASTE------------------')
+      break
 
-        computer= computer_choice()
-        user= user_choice()
-        print(f"{user} vs {computer}, ")
-            
-
-        if user == computer:
-
-            rounds -= 1
-            print(f"""
-
-            Tie!
-            You have both picked {user}
-            {rounds} remaining.
-
-            """)
-
-
-        if (user == "scissors" and computer == "paper") or (user == "rock" and computer == "scissors") or (user == "paper" and computer == "rock"):
-        
-            rounds -= 1
-            user_win += True
-
-            print(f"""
-            
-            You have won this round!
-            {user} beats {computer}!
-            {rounds} remaining.
-
-            """)
-
-
-        if (computer == "scissors" and user == "paper") or (computer == "rock" and user == "scissors") or (computer == "paper" and user == "rock"):
-    
-            rounds -= 1
-            computer_win += True
-            
-            print(f"""
-            
-            You have lost this round.
-            {computer} beats {user}!
-            {rounds} remaining.
-
-            """)
-
-        
-        if rounds <= 0:
-            if user_win == computer_win:
-                print("It's a tie, you ended the game with the same amount of points.")
-                break
-            if computer_win > user_win:
-                print(f"Match ended. The winner is the computer with {computer_win} points.")
-                break
-            if computer_win < user_win:
-                print(f"Match ended. You are the winner with {user_win} points!")
-                break
-
-
-if __name__ == "__main__":
-    # Global choice options.
-    options= ("rock", "paper", "scissors")
-    run_game()
+run_game()
